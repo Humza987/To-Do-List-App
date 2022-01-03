@@ -1,0 +1,15 @@
+package todo;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class GUI_Project {
+	JFrame frame = new JFrame();
+	JPanel panel = new JPanel();
+	panel.setBorder(BorderFactory.createEmptyBorder());
+//	panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setVisible(true);
+}
+public static void main(String[]args) {
+	new GUI_Project();
+}
