@@ -1,0 +1,50 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+
+public class GUI {
+	JFrame frame = new JFrame();
+	JTextField textField = new JTextField();
+	JPanel panel = new JPanel();
+	JPanel panel2 = new JPanel();
+	public GUI() {
+	
+		JButton button = new JButton("Click me");  
+		JList list = new JList();
+		
+		DefaultListModel model = new DefaultListModel();
+		model.addElement("lol");
+		model.addElement("lol");
+		model.addElement("lol");
+		list.setModel(model);	
+		
+		panel.add(button);
+		panel.add(new JScrollPane(list));
+		panel.add(textField);
+		panel.setLayout(new GridLayout(1,2));
+
+		frame.setTitle("To-Do List App");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(panel);
+		frame.setSize(500,500);
+		frame.setVisible(true);
+		 
+	}
+	
+	public static void main(String[] args) {
+		new GUI();
+	}
+}
+
+
