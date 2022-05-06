@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,10 +15,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-// Creating a To-Do List App GUI
+// Creating a To-Do List App GUI with SQL database to retrieve, save and delete task entries.
+// Version 2.0: Added SQL database functionality
 // Name: Humza Inam
 
 public class GUI {
+	JDBC jbdc = new JDBC();
 	JFrame frame = new JFrame();
 	JTextField textField = new JTextField();
 	JTextField textField2 = new JTextField();                  
@@ -29,12 +31,17 @@ public class GUI {
 	JButton button2 = new JButton("Delete Task");  
 	JTable table = new JTable();
 	String[] columnTitle = {"Task", "Date"};
+	String[] row = new String[2];
+	DefaultTableModel model = new DefaultTableModel(); 
+	String tasks;
+	String date;
+	 boolean performed;
+
 
 	public GUI() {
 		textField.setPreferredSize(new Dimension(300,30));	  
 		textField2.setPreferredSize(new Dimension(300,30));
 		table.setPreferredScrollableViewportSize(new Dimension(300,table.getRowHeight() * 7));
-		DefaultTableModel model = new DefaultTableModel(); 
 
 		model.setColumnIdentifiers(columnTitle);
 		table.setModel(model);;                           
@@ -58,16 +65,22 @@ public class GUI {
 		frame.setSize(350,350);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		String[] row = new String[2];
 
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				if(!textField.getText().toString().isEmpty()) {
 					String message = textField.getText().toString();
-					String message2 = textField2.getText().toString();     
+					String message2 = textField2.getText().toString();    
 					row[0] = message;
 					row[1] = message2;                         
 					model.addRow(row);
+					try {
+						JDBC.statement2.executeUpdate("INSERT INTO todo.list (tasks,date) VALUES('"+message+"', '"+message2+"');");
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 					textField.setText(null);
 					textField2.setText(null);
 				}
@@ -78,19 +91,29 @@ public class GUI {
 		button2.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				try {
+					int index = table.getSelectedRow();
+					tasks = table.getValueAt(index,0).toString();
+
 					model.removeRow(table.getSelectedRow());
+
+					
+					
+				try {
+					JDBC.statement2.executeUpdate("DELETE FROM todo.list WHERE tasks='"+tasks+"';");
+
+					}
+				catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
-				catch(Exception e2) {
-					return;
-				}
+			catch(Exception e2) {
+				return;
+			}
 			}
 		});
 
 	}
 
-	public static void main(String[] args) {
-		new GUI();
-	}
 }
 
 
